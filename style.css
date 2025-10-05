@@ -34,6 +34,8 @@ h2 {
 .pokemon-list {
   width: 35%;
   overflow-y: auto;
+    max-height: 100vh;
+  scroll-behavior: smooth;
 }
 
 /* Card Pokémon */
