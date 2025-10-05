@@ -12,11 +12,11 @@ fetch("https://pokebuildapi.fr/api/v1/pokemon")
         loading.remove();
 
         // On affiche la liste complète au départ
-        afficherPokemons(allPokemons);
+        showPokemons(allPokemons);
     });
 
 // --- FONCTION POUR AFFICHER LES POKÉMONS ---
-function afficherPokemons(pokemons) {
+function showPokemons(pokemons) {
     const pokemonList = document.querySelector(".pokemon-list");
     // on vide la liste avant d’ajouter les nouvelles cards
     pokemonList.innerHTML = "";
@@ -30,11 +30,11 @@ function afficherPokemons(pokemons) {
 
         // Pokemon ID 
         const pokemonId = document.createElement("span");
-        pokemonId.textContent = pokemon.id;
+        pokemonId.textContent = '#' + pokemon.id;
 
         // Pokemon name 
         const pokemonName = document.createElement("span");
-        pokemonName.textContent = pokemon.name;
+        pokemonName.textContent =  pokemon.name;
 
         // Pokemon sprite
         const pokemonSprite = document.createElement("img");
@@ -54,11 +54,11 @@ const searchInput = document.getElementById("search-input");
 
 searchInput.addEventListener("input", (event) => {
     // String venant du formulaire
-    const searchTerm = event.target.value.toLowerCase();
-    const filtered = allPokemons.filter(pokemon =>
-        pokemon.name.toLowerCase().includes(searchTerm)
+    const searchStr = event.target.value.toLowerCase();
+    const filteredPokemons = allPokemons.filter(pokemon =>
+        pokemon.name.toLowerCase().includes(searchStr)
     );
 
     // On affiche uniquement les pokémons filtrés
-    afficherPokemons(filtered);
+    showPokemons(filteredPokemons);
 });
