@@ -1,12 +1,13 @@
 /* ALL */
 * {
-  /* border: solid 1px black; */
+  border: solid 1px black;
   margin: 0;
   padding: 0;
 }
 
 /* Body */
 body {
+  background-color: #e71e1e;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -34,7 +35,7 @@ h2 {
 .pokemon-list {
   width: 35%;
   overflow-y: auto;
-    max-height: 100vh;
+  max-height: 100vh;
   scroll-behavior: smooth;
 }
 
@@ -54,4 +55,22 @@ h2 {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+}
+.desc-img{
+  height: 500px;
+    object-fit: contain;
+
+}
+
+.type-card{
+  display: flex;
+}
+.type-img {
+  height: 50px;
+  object-fit: contain;
 }

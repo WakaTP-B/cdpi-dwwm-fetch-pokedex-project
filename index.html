@@ -17,27 +17,46 @@
         </section>
 
         <section class="pokemon-details">
+
             <search>
                 <form class="search-bar">
                     <input type="search" id="search-input" placeholder="Rechercher un Pokémon">
                     <button type="submit">🔍</button>
                 </form>
             </search>
-            <div class="description">
-                <span>ID</span>
-                <span>img src="" alt=""</span>
-                <h2>Name</h2>
-                <span>Type</span>
-                <div class="evolution">
-                    <span>Evolution</span>
-                    <div class="evolution-card">
-                        <span>ID</span>
-                        <span>Name</span>
-                        <span>img sprite</span>
+
+            <template id="description-template">
+
+                <div class="description">
+                    <span class="desc-id">ID</span>
+                    <img class="desc-img" src="" alt="">
+                    <h2 class="desc-name">Name</h2>
+
+                    <div class="desc-type">
+                        <span>Type :</span>
+                        <template id="type-template">
+                            <div class="type-card">
+                                <span class="type-name"></span>
+                                <img class="type-img" src="" alt="">
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="evolution">
+                        <template id="evolution-template">
+                            <h3>Evolution</h3>
+                            <div class="evolution-card">
+                                <span class="evo-id">ID</span>
+                                <span class="evo-name">Name</span>
+                                <img class="evo-img" src="" alt="">
+                            </div>
+                        </template>
                     </div>
 
                 </div>
-            </div>
+
+            </template>
+
         </section>
     </div>
 
