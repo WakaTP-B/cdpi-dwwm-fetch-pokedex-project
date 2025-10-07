@@ -184,10 +184,11 @@ function showTypes(types) {
         img.alt = type.name;
         img.title = type.name;
         img.dataset.type = type.name
-        img.classList.add(type.name);
+        img.dataset.type = type.name.toLowerCase();
+        img.classList.add("type-icon");
 
         img.addEventListener("click", () => {
-            const tLower = type.name.toLowerCase(); // CHANGEMENT: normalise en lowercase
+            const tLower = type.name.toLowerCase();
             if (selectedTypes.includes(tLower)) {
                 selectedTypes = selectedTypes.filter(t => t !== tLower);
                 img.classList.remove("selected");
@@ -220,12 +221,24 @@ function applyFilters() {
             (pokemon.name && pokemon.name.toLowerCase().includes(searchStr)) ||
             (pokemon.id && pokemon.id.toString().includes(searchStr));
 
-        const matchType =
-            selectedTypes.length === 0 ||
-            pokemon.apiTypes.some(t => selectedTypes.includes(t.name.toLowerCase())); // CHANGEMENT: comparaison en lowercase
+        const types = pokemon.apiTypes || [];
+        const matchType = selectedTypes.length === 0 ||
+            selectedTypes.every(sel => types.some(t => (t.name || "").toLowerCase() === sel));
 
         return matchNameOrId && matchType;
     });
+
+    const pokemonList = document.querySelector(".pokemon-list");
+    const detailSection = document.querySelector(".pokemon-details");
+
+    if (!filteredPokemons.length) {
+
+        if (detailSection) {
+            detailSection.innerHTML = '<p class="no-result">Aucun Pokémon correspondant.</p>';
+        }
+        return;
+    }
+
 
     // Affiche uniquement les pokémons filtrés
     showPokemons(filteredPokemons);
