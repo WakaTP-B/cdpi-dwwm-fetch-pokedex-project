@@ -100,6 +100,7 @@ function showPokemonDesc(pokemon) {
             .then(res => res.json())
             .then(prePokemon => {
                 const preClone = evoTemplate.content.cloneNode(true);
+                preClone.querySelector(".evo-info").textContent = "Pré-évolution";
                 preClone.querySelector(".evo-id").textContent = "#" + prePokemon.id;
                 preClone.querySelector(".evo-name").textContent = prePokemon.name;
                 preClone.querySelector(".evo-img").src = prePokemon.sprite;
@@ -115,6 +116,7 @@ function showPokemonDesc(pokemon) {
             .then(res => res.json())
             .then(postPokemon => {
                 const evoClone = evoTemplate.content.cloneNode(true);
+                evoClone.querySelector(".evo-info").textContent = "Évolution";
                 evoClone.querySelector(".evo-id").textContent = "#" + postPokemon.id;
                 evoClone.querySelector(".evo-name").textContent = postPokemon.name;
                 evoClone.querySelector(".evo-img").src = postPokemon.sprite;
