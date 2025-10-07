@@ -74,12 +74,12 @@ function showPokemonDesc(pokemon) {
     // Type
     const typeContainer = clone.querySelector(".desc-type");
     const typeTemplate = typeContainer.querySelector("#type-template");
-    typeContainer.removeChild(typeTemplate);
+    // typeTemplate.remove();
 
     pokemon.apiTypes.forEach(type => {
         const typeClone = typeTemplate.content.cloneNode(true);
-        typeClone.querySelector(".type-name").textContent = type.name;
         const typeImg = typeClone.querySelector(".type-img");
+        typeClone.querySelector(".type-name").textContent = type.name;
         typeImg.src = type.image;
         typeImg.alt = type.name;
         typeContainer.appendChild(typeClone);
@@ -88,29 +88,51 @@ function showPokemonDesc(pokemon) {
     // Gestion des évolutions (si dispo)
     const evoContainer = clone.querySelector(".evolution");
     const evoTemplate = evoContainer.querySelector("#evolution-template");
-    evoContainer.removeChild(evoTemplate);
+    // evoTemplate.remove();
+
+    let evoFound = false;
+
+    // Pré-évolution
+    if (pokemon.apiPreEvolution) {
+        evoFound = true;
+        const prePokemonId = pokemon.apiPreEvolution.pokedexIdd;
+        fetch(`https://pokebuildapi.fr/api/v1/pokemon/${prePokemonId}`)
+            .then(res => res.json())
+            .then(prePokemon => {
+                const preClone = evoTemplate.content.cloneNode(true);
+                preClone.querySelector(".evo-id").textContent = "#" + prePokemon.id;
+                preClone.querySelector(".evo-name").textContent = prePokemon.name;
+                preClone.querySelector(".evo-img").src = prePokemon.sprite;
+                evoContainer.appendChild(preClone);
+            });
+    }
+
+    // Évolution
     if (pokemon.apiEvolutions && pokemon.apiEvolutions.length > 0) {
-        pokemon.apiEvolutions.forEach(evo => {
-            const evoClone = evoTemplate.content.cloneNode(true);
-            evoClone.querySelector(".evo-id").textContent = "#" + evo.pokedexId;
-            evoClone.querySelector(".evo-name").textContent = evo.name;
-            const evoImg = evoClone.querySelector(".evo-img");
-            evoImg.src = evo.image;
-            evoImg.alt = evo.name;
-            evoContainer.appendChild(evoClone);
-        });
-    } else {
+        evoFound = true;
+        const evo = pokemon.apiEvolutions[0];
+        fetch(`https://pokebuildapi.fr/api/v1/pokemon/${evo.pokedexId}`)
+            .then(res => res.json())
+            .then(postPokemon => {
+                const evoClone = evoTemplate.content.cloneNode(true);
+                evoClone.querySelector(".evo-id").textContent = "#" + postPokemon.id;
+                evoClone.querySelector(".evo-name").textContent = postPokemon.name;
+                evoClone.querySelector(".evo-img").src = postPokemon.sprite;
+                evoContainer.appendChild(evoClone);
+            });
+    }
+
+    // Aucune évolution
+    if (!pokemon.apiPreEvolution && (!pokemon.apiEvolutions || pokemon.apiEvolutions.length === 0)) {
         const noEvo = document.createElement("p");
         noEvo.textContent = "Aucune évolution connue.";
         evoContainer.appendChild(noEvo);
     }
 
-    // Remplacement du contenu précédent
-    const oldDescription = detailSection.querySelector(".description");
-    if (oldDescription) oldDescription.remove();
+    // Nettoyage et affichage
+    detailSection.querySelector(".description")?.remove();
     detailSection.appendChild(clone);
 }
-
 
 
 // Filtre
