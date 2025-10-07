@@ -64,7 +64,6 @@ h2 {
 .desc-img{
   height: 500px;
     object-fit: contain;
-
 }
 
 .type-card{
@@ -73,4 +72,36 @@ h2 {
 .type-img {
   height: 50px;
   object-fit: contain;
+}
+.evolution{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  text-align: center;
+}
+.evo-card img {
+  height: 80px;
+  width: 80px;
+}
+.type-filter {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  gap: 10px;
+  margin: 15px 0;
+}
+.type-filter img {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.type-filter img:hover {
+  transform: scale(1.1);
+}
+
+.type-filter img.selected {
+  border-color: #f5c518;
+  box-shadow: 0 0 10px rgba(245, 197, 24, 0.7);
 }

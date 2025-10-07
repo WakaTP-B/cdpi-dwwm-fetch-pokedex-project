@@ -24,6 +24,7 @@
                     <button type="submit">🔍</button>
                 </form>
             </search>
+            <div class="type-filter"></div>
 
             <template id="description-template">
 
@@ -43,11 +44,20 @@
                     </div>
 
                     <div class="evolution">
+
+                        <div class="pre-evo">
+                            <p class="no-pre-evo">Pré-évolution non disponible</p>
+                        </div>
+
+                        <div class="evo">
+                            <p class="no-evo">Aucune évolution connue</p>
+                        </div>
+
                         <template id="evolution-template">
-                            <div class="evolution-card">
-                                <span class="evo-info">Évolution</span>
-                                <span class="evo-id">ID</span>
-                                <span class="evo-name">Name</span>
+                            <div class="evo-card">
+                                <span class="evo-info"></span>
+                                <span class="evo-id"></span>
+                                <span class="evo-name"></span>
                                 <img class="evo-img" src="" alt="">
                             </div>
                         </template>
