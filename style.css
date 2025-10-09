@@ -105,3 +105,11 @@ h2 {
   border-color: #f5c518;
   box-shadow: 0 0 10px rgba(245, 197, 24, 0.7);
 }
+
+
+.no-result {
+  padding: 20px;
+  text-align: center;
+  font-weight: 700;
+  color: #fff;
+}

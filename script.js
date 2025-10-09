@@ -3,6 +3,12 @@ let allPokemons = [];
 let allTypes = [];
 let selectedTypes = [];
 
+// Éviter reload sur formulaire
+const searchForm = document.querySelector('.search-bar');
+if (searchForm) {
+    searchForm.addEventListener('submit', e => e.preventDefault());
+}
+
 // Fetch pokemons
 fetch("https://pokebuildapi.fr/api/v1/pokemon")
     .then(response_obj => response_obj.json())
@@ -10,14 +16,11 @@ fetch("https://pokebuildapi.fr/api/v1/pokemon")
         // On stock tous les pokémons
         allPokemons = pokemons;
         const loading = document.querySelector(".loading");
-        if (loading) loading.remove(); // guard ajouté
+        if (loading) loading.remove();
 
         // On affiche la liste complète au départ
         showPokemons(allPokemons);
     })
-    .catch(err => {
-        console.error("Erreur fetch pokemons:", err);
-    });
 
 // Fetch types
 fetch("https://pokebuildapi.fr/api/v1/types")
@@ -35,6 +38,17 @@ function showPokemons(pokemons) {
     const pokemonList = document.querySelector(".pokemon-list");
     // on vide la liste avant d’ajouter les nouvelles cards
     pokemonList.innerHTML = "";
+
+    //Aucun résultat
+    if (pokemons.length === 0) {
+        const noResultMsg = document.createElement("p");
+        noResultMsg.classList.add("no-result");
+        noResultMsg.textContent = "Aucun Pokémon correspondant.";
+        pokemonList.appendChild(noResultMsg);
+
+        showNoResultDesc(); // 
+        return;
+    }
 
     pokemons.forEach(pokemon => {
 
@@ -67,27 +81,46 @@ function showPokemons(pokemons) {
 
     });
 
-    // --- Affichage random selon filtres actifs ---
+    // Affichage random selon filtres actifs
     if (pokemons.length > 0) {
         const randomPokemon = pokemons[Math.floor(Math.random() * pokemons.length)];
         showPokemonDesc(randomPokemon);
-    } else {
-        // si aucun résultat
-        const detailSection = document.querySelector(".pokemon-details");
-        if (detailSection) {
-            detailSection.innerHTML = "<p>Aucun Pokémon trouvé.</p>";
-        }
     }
+}
+
+// Aucun résultat
+function showNoResultDesc() {
+    const detailSection = document.querySelector(".pokemon-details");
+    const descriptionTemplate = document.getElementById("description-template");
+    if (!detailSection || !descriptionTemplate) return;
+
+    const clone = descriptionTemplate.content.cloneNode(true);
+
+    clone.querySelector(".desc-id").textContent = "#???";
+    const img = clone.querySelector(".desc-img");
+    // Remplace <img> ===> <p>
+    const noResult = document.createElement("p");
+    noResult.textContent = "Aucun Pokémon correspondant";
+    noResult.classList.add("no-result");
+    img.replaceWith(noResult);
+
+    clone.querySelector(".desc-name").textContent = "???";
+
+    const typeContainer = clone.querySelector(".desc-type");
+    typeContainer.innerHTML = "<span>Type : ???</span>";
+
+    const evoContainer = clone.querySelector(".evolution");
+    evoContainer.innerHTML = "<p class='no-result'>Aucune évolution correspondante</p>";
+
+    // Nettoyage + affichage
+    detailSection.querySelector(".description")?.remove();
+    detailSection.appendChild(clone);
 }
 
 // Fonction affichage des pokémons
 function showPokemonDesc(pokemon) {
     const detailSection = document.querySelector(".pokemon-details");
     const descriptionTemplate = document.getElementById("description-template");
-    if (!detailSection || !descriptionTemplate) {
-        console.warn("Élément .pokemon-details ou #description-template introuvable");
-        return;
-    }
 
     // Clone du template
     const clone = descriptionTemplate.content.cloneNode(true);
@@ -101,7 +134,6 @@ function showPokemonDesc(pokemon) {
     // Type
     const typeContainer = clone.querySelector(".desc-type");
     const typeTemplate = typeContainer.querySelector("#type-template");
-    // typeTemplate.remove();
 
     pokemon.apiTypes.forEach(type => {
         const typeClone = typeTemplate.content.cloneNode(true);
@@ -115,7 +147,6 @@ function showPokemonDesc(pokemon) {
     // Gestion des évolutions (si dispo)
     const evoContainer = clone.querySelector(".evolution");
     const evoTemplate = evoContainer.querySelector("#evolution-template");
-    // evoTemplate.remove();
     const preEvoContainer = evoContainer.querySelector(".pre-evo");
     const postEvoContainer = evoContainer.querySelector(".evo");
     const preEvoMsg = evoContainer.querySelector(".no-pre-evo");
@@ -126,11 +157,14 @@ function showPokemonDesc(pokemon) {
     postEvoContainer.querySelectorAll(".evo-card").forEach(el => el.remove());
 
     // Reset message
-    if (preEvoMsg) preEvoMsg.textContent = "Pré-évolution non disponible";
+    if (preEvoMsg) preEvoMsg.textContent = "Pas de pré-évolution";
     if (postEvoMsg) postEvoMsg.textContent = "Aucune évolution connue";
 
     // Pré-évolution
     if (pokemon.apiPreEvolution && pokemon.apiPreEvolution !== "none") {
+
+        if (preEvoMsg) preEvoMsg.textContent = "";
+
         const prePokemonId = pokemon.apiPreEvolution.pokedexIdd;
         fetch(`https://pokebuildapi.fr/api/v1/pokemon/${prePokemonId}`)
             .then(res => res.json())
@@ -141,15 +175,14 @@ function showPokemonDesc(pokemon) {
                 preClone.querySelector(".evo-name").textContent = prePokemon.name;
                 preClone.querySelector(".evo-img").src = prePokemon.sprite;
                 preEvoContainer.appendChild(preClone);
-                if (preEvoMsg) preEvoMsg.textContent = "";
+
             })
-            .catch(err => console.error("Erreur fetch pré-évolution:", err));
-    } else {
-        if (preEvoMsg) preEvoMsg.textContent = "Aucune pré-évolution.";
     }
 
     // Évolution
     if (pokemon.apiEvolutions && pokemon.apiEvolutions.length > 0) {
+        if (postEvoMsg) postEvoMsg.textContent = "";
+
         pokemon.apiEvolutions.forEach(evo => {
             fetch(`https://pokebuildapi.fr/api/v1/pokemon/${evo.pokedexId}`)
                 .then(res => res.json())
@@ -160,14 +193,9 @@ function showPokemonDesc(pokemon) {
                     evoClone.querySelector(".evo-name").textContent = postPokemon.name;
                     evoClone.querySelector(".evo-img").src = postPokemon.sprite;
                     postEvoContainer.appendChild(evoClone);
-                    if (postEvoMsg) postEvoMsg.textContent = "";
                 })
-                .catch(err => console.error("Erreur fetch évolution:", err));
         });
-    } else {
-        if (postEvoMsg) postEvoMsg.textContent = "Aucune évolution connue.";
     }
-
     // Nettoyage et affichage
     detailSection.querySelector(".description")?.remove();
     detailSection.appendChild(clone);
@@ -183,17 +211,21 @@ function showTypes(types) {
         img.src = type.image;
         img.alt = type.name;
         img.title = type.name;
-        img.dataset.type = type.name
-        img.dataset.type = type.name.toLowerCase();
         img.classList.add("type-icon");
+        img.dataset.type = type.name.toLowerCase();
 
+        //img.addEventListener("click", function () {
         img.addEventListener("click", () => {
-            const tLower = type.name.toLowerCase();
-            if (selectedTypes.includes(tLower)) {
-                selectedTypes = selectedTypes.filter(t => t !== tLower);
+            const typeLower = type.name.toLowerCase();
+            if (selectedTypes.includes(typeLower)) {
+
+                // selectedTypes = selectedTypes.filter(function(type) {
+                //     return typeCourant !== typeLower;
+                // });
+                selectedTypes = selectedTypes.filter(type => type !== typeLower);
                 img.classList.remove("selected");
             } else {
-                selectedTypes.push(tLower);
+                selectedTypes.push(typeLower);
                 img.classList.add("selected");
             }
             applyFilters();
@@ -208,37 +240,25 @@ const searchInput = document.getElementById("search-input");
 
 if (searchInput) {
     searchInput.addEventListener("input", applyFilters);
-} else {
-    console.warn("#search-input introuvable — le filtre par texte est désactivé");
 }
 
 function applyFilters() {
     // String venant du formulaire
-    const searchStr = (searchInput && searchInput.value) ? searchInput.value.toLowerCase() : "";
+    const searchStr = searchInput.value.toLowerCase();
 
     const filteredPokemons = allPokemons.filter(pokemon => {
         const matchNameOrId =
-            (pokemon.name && pokemon.name.toLowerCase().includes(searchStr)) ||
-            (pokemon.id && pokemon.id.toString().includes(searchStr));
+            pokemon.name.toLowerCase().includes(searchStr) ||
+            pokemon.id.toString().includes(searchStr);
 
-        const types = pokemon.apiTypes || [];
-        const matchType = selectedTypes.length === 0 ||
-            selectedTypes.every(sel => types.some(t => (t.name || "").toLowerCase() === sel));
+        const allTypes = pokemon.apiTypes;
+        const matchType =
+            selectedTypes.length === 0 ||
+            selectedTypes.every(filterType =>
+                allTypes.some(type => type.name.toLowerCase() === filterType));
 
         return matchNameOrId && matchType;
     });
-
-    const pokemonList = document.querySelector(".pokemon-list");
-    const detailSection = document.querySelector(".pokemon-details");
-
-    if (!filteredPokemons.length) {
-
-        if (detailSection) {
-            detailSection.innerHTML = '<p class="no-result">Aucun Pokémon correspondant.</p>';
-        }
-        return;
-    }
-
 
     // Affiche uniquement les pokémons filtrés
     showPokemons(filteredPokemons);
