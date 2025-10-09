@@ -60,15 +60,18 @@ function showPokemons(pokemons) {
         // Pokemon ID 
         const pokemonId = document.createElement("span");
         pokemonId.textContent = '#' + pokemon.id;
+        pokemonId.classList.add("pokemon-id");
 
         // Pokemon name 
         const pokemonName = document.createElement("span");
         pokemonName.textContent = pokemon.name;
-
+        pokemonName.classList.add("pokemon-name");
+        
         // Pokemon sprite
         const pokemonSprite = document.createElement("img");
         pokemonSprite.src = pokemon.sprite;
         pokemonSprite.alt = pokemon.name;
+        pokemonSprite.classList.add("pokemon-img");
 
         // Formation de la card
         card.append(pokemonId, pokemonName, pokemonSprite);
@@ -110,7 +113,7 @@ function showNoResultDesc() {
     typeContainer.innerHTML = "<span>Type : ???</span>";
 
     const evoContainer = clone.querySelector(".evolution");
-    evoContainer.innerHTML = "<p class='no-result'>Aucune évolution correspondante</p>";
+    evoContainer.innerHTML = "";
 
     // Nettoyage + affichage
     detailSection.querySelector(".description")?.remove();
@@ -153,8 +156,8 @@ function showPokemonDesc(pokemon) {
     const postEvoMsg = evoContainer.querySelector(".no-evo");
 
     // Clean card évolution
-    preEvoContainer.querySelectorAll(".evo-card").forEach(el => el.remove());
-    postEvoContainer.querySelectorAll(".evo-card").forEach(el => el.remove());
+    preEvoContainer.querySelectorAll(".evo-card").forEach(evoCard => evoCard.remove());
+    postEvoContainer.querySelectorAll(".evo-card").forEach(evoCard => evoCard.remove());
 
     // Reset message
     if (preEvoMsg) preEvoMsg.textContent = "Pas de pré-évolution";
@@ -262,4 +265,20 @@ function applyFilters() {
 
     // Affiche uniquement les pokémons filtrés
     showPokemons(filteredPokemons);
+}
+
+// Clean filter type
+const clearTypesBtn = document.querySelector(".clear-types");
+if (clearTypesBtn) {
+    clearTypesBtn.addEventListener("click", () => {
+
+        selectedTypes = [];
+
+        // Remove le style
+        const typeIcons = document.querySelectorAll(".type-icon.selected");
+        typeIcons.forEach(icon => icon.classList.remove("selected"));
+
+        // Réapplique le filtre (pour afficher tous les Pokémon)
+        applyFilters();
+    });
 }
