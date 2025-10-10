@@ -66,7 +66,7 @@ function showPokemons(pokemons) {
         const pokemonName = document.createElement("span");
         pokemonName.textContent = pokemon.name;
         pokemonName.classList.add("pokemon-name");
-        
+
         // Pokemon sprite
         const pokemonSprite = document.createElement("img");
         pokemonSprite.src = pokemon.sprite;
@@ -114,6 +114,8 @@ function showNoResultDesc() {
 
     const evoContainer = clone.querySelector(".evolution");
     evoContainer.innerHTML = "";
+
+
 
     // Nettoyage + affichage
     detailSection.querySelector(".description")?.remove();
@@ -174,14 +176,21 @@ function showPokemonDesc(pokemon) {
             .then(prePokemon => {
                 const preClone = evoTemplate.content.cloneNode(true);
                 preClone.querySelector(".evo-info").textContent = "Pré-évolution";
-                preClone.querySelector(".evo-id").textContent = "#" + prePokemon.id;
-                preClone.querySelector(".evo-name").textContent = prePokemon.name;
-                preClone.querySelector(".evo-img").src = prePokemon.sprite;
+
+                const evoCard = preClone.querySelector(".evo-card");
+                const evoImg = evoCard.querySelector(".evo-img");
+                const evoId = evoCard.querySelector(".evo-id");
+                const evoName = evoCard.querySelector(".evo-name");
+
+                evoId.textContent = "#" + prePokemon.id;
+                evoName.textContent = prePokemon.name;
+                evoImg.src = prePokemon.sprite;
+                evoImg.alt = prePokemon.name;
+
+                evoCard.addEventListener("click", () => showPokemonDesc(prePokemon));
                 preEvoContainer.appendChild(preClone);
-
-            })
+            });
     }
-
     // Évolution
     if (pokemon.apiEvolutions && pokemon.apiEvolutions.length > 0) {
         if (postEvoMsg) postEvoMsg.textContent = "";
@@ -192,13 +201,24 @@ function showPokemonDesc(pokemon) {
                 .then(postPokemon => {
                     const evoClone = evoTemplate.content.cloneNode(true);
                     evoClone.querySelector(".evo-info").textContent = "Évolution";
-                    evoClone.querySelector(".evo-id").textContent = "#" + postPokemon.id;
-                    evoClone.querySelector(".evo-name").textContent = postPokemon.name;
-                    evoClone.querySelector(".evo-img").src = postPokemon.sprite;
+
+                    // on cible les éléments déjà présents dans le template
+                    const evoCard = evoClone.querySelector(".evo-card");
+                    const evoImg = evoCard.querySelector(".evo-img");
+                    const evoId = evoCard.querySelector(".evo-id");
+                    const evoName = evoCard.querySelector(".evo-name");
+
+                    evoId.textContent = "#" + postPokemon.id;
+                    evoName.textContent = postPokemon.name;
+                    evoImg.src = postPokemon.sprite;
+                    evoImg.alt = postPokemon.name;
+
+                    evoCard.addEventListener("click", () => showPokemonDesc(postPokemon));
                     postEvoContainer.appendChild(evoClone);
                 })
         });
     }
+
     // Nettoyage et affichage
     detailSection.querySelector(".description")?.remove();
     detailSection.appendChild(clone);

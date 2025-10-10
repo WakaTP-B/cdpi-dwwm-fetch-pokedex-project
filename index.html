@@ -24,8 +24,8 @@
                     <input type="search" id="search-input" placeholder="Nom ou #ID">
                     <span>🔍</span>
                     <!-- <button type="submit">🔍</button> -->
-                    <span class="clear-types">✖️</span>
                 </form>
+                <span class="clear-types">✖️</span>
             </div>
             <div class="type-filter"></div>
 
@@ -58,12 +58,17 @@
 
                         <template id="evolution-template">
                             <div class="evo-card">
-                                <span class="evo-info"></span>
-                                <span class="evo-id"></span>
-                                <span class="evo-name"></span>
-                                <img class="evo-img" src="" alt="">
+                                <div class="evo-info"></div>
+                                <div class="evo-content">
+                                    <div class="evo-text">
+                                        <span class="evo-id"></span>
+                                        <span class="evo-name"></span>
+                                    </div>
+                                    <img class="evo-img" src="" alt="">
+                                </div>
                             </div>
                         </template>
+
                     </div>
 
                 </div>

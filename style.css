@@ -15,7 +15,8 @@ body {
 
 }
 
-h1, h2 {
+h1,
+h2 {
   text-align: center;
   margin: 20px 0;
 }
@@ -23,7 +24,8 @@ h1, h2 {
 /* Container principal */
 .container {
   display: flex;
-  min-height: 0; /* pour scroll correct */
+  min-height: 0;
+  /* pour scroll correct */
   height: 100vh;
 }
 
@@ -34,7 +36,7 @@ h1, h2 {
   height: 100vh;
   scroll-behavior: smooth;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   gap: 10px;
   padding: 20px;
 }
@@ -84,7 +86,7 @@ h1, h2 {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  
+
 }
 
 .description {
@@ -99,8 +101,8 @@ h1, h2 {
   object-fit: contain;
 }
 
-.desc-type{
-display: flex;
+.desc-type {
+  display: flex;
 }
 
 .type-card {
@@ -115,20 +117,63 @@ display: flex;
   object-fit: contain;
 }
 
-.evolution {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+/* Section recherche */
+.search {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  text-align: center;
-  gap: 10px;
+  margin: 20px 0;
 }
 
-.evo-card img {
-  height: 80px;
-  width: 80px;
+/* La barre de recherche */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #b71c1c;
+  /* rouge foncé */
+  border-radius: 10px;
+  padding: 8px 15px;
+  width: 80%;
+  max-width: 400px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Filtre */
+/* Icônes */
+.search-bar span {
+  font-size: 1.3rem;
+  color: #fff;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+/* Input */
+.search-bar input[type="search"] {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 1rem;
+  padding: 8px;
+}
+
+/* Placeholder */
+.search-bar input::placeholder {
+  color: #ffdede;
+}
+
+/* Effet focus */
+.search-bar:focus-within {
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  background-color: #a31818;
+}
+
+/* ✖️ Clear bouton */
+.clear-types {
+  cursor: pointer;
+}
+
+/* Filtre type */
 .type-filter {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
@@ -154,7 +199,7 @@ display: flex;
   box-shadow: 0 0 10px rgba(245, 197, 24, 0.7);
 }
 
-/* ✖️ */
+/* No result */
 .no-result {
   padding: 20px;
   text-align: center;
@@ -164,6 +209,85 @@ display: flex;
   border-radius: 8px;
 }
 
-.clear-types {
+/* Section evo*/
+.evolution {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  padding: 10px;
+  align-items: start;
+}
+
+/* Sous-sections pré-évo et évo */
+.pre-evo,
+.evo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+}
+
+/* Evo card */
+.evo-card {
+  background-color: #1f1f1f;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 8px;
+  padding: 10px;
+  width: 220px;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.evo-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.evo-info {
+  color: #f5c518;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.evo-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Bloc texte */
+.evo-text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ID et name */
+.evo-id {
+  font-weight: bold;
+  font-size: 1rem;
+}
+.evo-name {
+  font-size: 0.95rem;
+}
+
+.evo-img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
