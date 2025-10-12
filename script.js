@@ -140,6 +140,10 @@ function showPokemonDesc(pokemon) {
     const typeContainer = clone.querySelector(".desc-type");
     const typeTemplate = typeContainer.querySelector("#type-template");
 
+    // Ajout un sous-container pour les icônes
+    const typeList = document.createElement("div");
+    typeList.classList.add("type-list");
+
     pokemon.apiTypes.forEach(type => {
         const typeClone = typeTemplate.content.cloneNode(true);
         const typeImg = typeClone.querySelector(".type-img");

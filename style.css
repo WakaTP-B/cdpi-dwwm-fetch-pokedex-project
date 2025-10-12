@@ -8,11 +8,13 @@
 body {
   background-color: #e71e1e;
   height: 100vh;
+  width: 100vw;
+  margin: 0;
   display: flex;
   flex-direction: column;
   font-family: 'Arial', sans-serif;
   color: #fff;
-
+  overflow: auto;
 }
 
 h1,
@@ -21,19 +23,26 @@ h2 {
   margin: 20px 0;
 }
 
+h1 {
+  height: 60px;
+  line-height: 60px;
+  margin: 0;
+  font-size: 1.6rem;
+}
+
 /* Container principal */
 .container {
   display: flex;
-  min-height: 0;
-  /* pour scroll correct */
-  height: 100vh;
+  /* 100vh moins la hauteur du h1 */
+  height: calc(100vh - 60px);
+  overflow: hidden;
 }
 
 /* Pokemon liste */
 .pokemon-list {
   width: 35%;
   overflow-y: auto;
-  height: 100vh;
+  height: 100%;
   scroll-behavior: smooth;
   display: flex;
   flex-direction: column;
@@ -82,39 +91,54 @@ h2 {
 
 /* Section détails */
 .pokemon-details {
+  width: 65%;
+  height: 100%;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-
+  overflow-y: auto;
+  justify-content: space-between;
 }
 
 .description {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
+  padding: 8px;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .desc-img {
-  height: 450px;
+  max-height: 48%;
+  height: auto;
+  width: auto;
+  max-width: 90%;
   object-fit: contain;
 }
 
 .desc-type {
   display: flex;
+  gap: 8px;
+
 }
 
 .type-card {
+  width: 50%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 5px;
-  margin: 5px 0;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .type-img {
   height: 50px;
-  object-fit: contain;
+  margin-bottom: 8px;
 }
 
 /* Section recherche */
@@ -130,7 +154,6 @@ h2 {
   display: flex;
   align-items: center;
   background-color: #b71c1c;
-  /* rouge foncé */
   border-radius: 10px;
   padding: 8px 15px;
   width: 80%;
@@ -182,8 +205,7 @@ h2 {
 }
 
 .type-filter img {
-  width: 50px;
-  height: 50px;
+  width: 35px;
   cursor: pointer;
   border: 2px solid transparent;
   border-radius: 50%;
@@ -211,26 +233,29 @@ h2 {
 
 /* Section evo*/
 .evolution {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  display: flex;
+  gap: 10px;
+  /* prend toute la largeur disponible de la colonne détails */
   width: 100%;
-  padding: 10px;
-  align-items: start;
+  box-sizing: border-box;
 }
 
 /* Sous-sections pré-évo et évo */
 .pre-evo,
 .evo {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex: 1 1 50%;
   gap: 15px;
-  width: 100%;
+  align-items: center;
+  overflow-x: auto;
+  padding: 6px;
+  box-sizing: border-box;
 }
 
 /* Evo card */
 .evo-card {
+  flex: 1 1 0;
+  min-width: 140px;
   background-color: #1f1f1f;
   color: white;
   display: flex;
@@ -238,7 +263,7 @@ h2 {
   align-items: stretch;
   border-radius: 8px;
   padding: 10px;
-  width: 220px;
+  width: auto;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
@@ -281,6 +306,7 @@ h2 {
   font-weight: bold;
   font-size: 1rem;
 }
+
 .evo-name {
   font-size: 0.95rem;
 }
